@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             +"/"+c.getString(c.getColumnIndex("time")))
         }
 
-        //todo 어뎁터부터 다시 짜기
+        //todo 어뎁터부터 다시 짜기!
 
     }
 
