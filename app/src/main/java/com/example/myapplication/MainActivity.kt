@@ -21,7 +21,6 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
-    lateinit var layoutmanager : LinearLayoutManager
     lateinit var arraylist : ArrayList<todoList>
     val edt_input : EditText by lazy{
         findViewById(R.id.edt_input)
@@ -46,11 +45,14 @@ class MainActivity : AppCompatActivity() {
             val time = c.getString(c.getColumnIndex("time"))
             val todolist = todoList(id,title,contents,time)
             arraylist.add(todolist)
-            Log.e("결 과",c.getString(c.getColumnIndex("title"))+"/"+c.getString(c.getColumnIndex("contents"))
-            +"/"+c.getString(c.getColumnIndex("time")))
+            Log.e("결 과",id+"-"+title+"."+contents +"/"+time)
         }
+        val todoAdapter = todoAdapter(arraylist,this)
+        rv_list.adapter = todoAdapter
 
-        //todo 어뎁터부터 다시 짜기!
+        rv_list.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        rv_list.setHasFixedSize(true)
+
 
     }
 
@@ -73,8 +75,7 @@ class MainActivity : AppCompatActivity() {
         dbHelper = DBHelper(this, "Todo.db", null, 1)
         database = dbHelper.writableDatabase
         dbHelper.onCreate(database)
-        rv_list.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-        rv_list.setHasFixedSize(true)
+
 
 
         getAll()
@@ -85,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             if(edt_input.text.isEmpty())
                 return@setOnClickListener
             Insert()
+            edt_input.setText("")
         }
     }
 }
