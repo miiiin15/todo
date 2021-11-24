@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="할 일"/>
+            android:hint="제목/내용 형식으로 작성해주세요."/>
 
         <Button
             android:id="@+id/btn_in"

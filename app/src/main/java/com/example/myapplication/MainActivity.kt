@@ -20,12 +20,10 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
-    val CALL_TODO = 1
-    var CALL_FINISHED = 2
-
-    lateinit var dbHelper_todo : DBHelper
-    lateinit var database_todo : SQLiteDatabase
     lateinit var arraylist : ArrayList<todoList>
+
+    val dbHelper : DBHelper by lazy { DBHelper(this, "Todo.db", null, 1) }
+    val database : SQLiteDatabase by lazy { dbHelper.writableDatabase }
 
     val edt_input : EditText by lazy{ findViewById(R.id.edt_input) }
     val btn_in : Button by lazy{ findViewById(R.id.btn_in) }
@@ -35,16 +33,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        dbHelper_todo = DBHelper(this, "Todo.db", null, 1)
-        database_todo = dbHelper_todo.writableDatabase
-        dbHelper_todo.onCreate(database_todo)
+        dbHelper.onCreate(database)
 
         setReceycleerView(getAll())
 
         btn_in.setOnClickListener{
-            if(edt_input.text.isEmpty()) return@setOnClickListener
+            if(edt_input.text.isEmpty()||edt_input.text.indexOf("/")==-1) return@setOnClickListener
             Insert()
             edt_input.setText("")
+            setReceycleerView(getAll())
         }
     }
 
@@ -54,16 +51,19 @@ class MainActivity : AppCompatActivity() {
         rv_list.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         rv_list.setHasFixedSize(true)
 
-        /*ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return true
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int){
-                (rv_list.adapter as todoAdapter).removeTask(viewHolder.adapterPosition)
+                var index =(rv_list.adapter as todoAdapter).getId(viewHolder.adapterPosition)
+                Log.e("삭제 ID " , index.toString())
+                database.execSQL("delete from todo where id = ${index}")
+                setReceycleerView(getAll())
             }
         }).apply {
             attachToRecyclerView(rv_list)
-        }*/
+        }
 
     }
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         arraylist = ArrayList<todoList>()
         arraylist.clear()
         var query = "SELECT * FROM todo;"
-        var c = database_todo.rawQuery(query,null)
+        var c = database.rawQuery(query,null)
         while(c.moveToNext()){
             val id = c.getString(c.getColumnIndex("id"))
             val title = c.getString(c.getColumnIndex("title"))
@@ -81,20 +81,20 @@ class MainActivity : AppCompatActivity() {
             val finished_time = c.getString(c.getColumnIndex("finished_time"))
             val todolist = todoList(id,title,contents,time,finished_time)
             arraylist.add(todolist)
-            Log.e("결 과",id+"-"+title+"."+contents +"/"+time+"/"+finished_time)
+//            Log.e("결 과",id+"-"+title+"."+contents +"/"+time+"/"+finished_time)
         }
         return arraylist
     }
 
     fun Insert(){
-        val text = edt_input.text.toString()
-
+        val str = edt_input.text.toString().split("/")
+        val title = str[0]
+        val contents = str[1]
         var contentValues_todo = ContentValues()
-        contentValues_todo.put("title",text)
-        contentValues_todo.put("contents","test")
+        contentValues_todo.put("title",title)
+        contentValues_todo.put("contents",contents)
         contentValues_todo.put("time",SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString())
-        database_todo.insert("todo",null,contentValues_todo)
-        setReceycleerView(getAll())
+        database.insert("todo",null,contentValues_todo)
     }
 
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todo.DBHelper
 import com.example.todo.Data.todoList
 
 
@@ -52,10 +53,9 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
     }
 
 
-    /*fun removeTask(position: Int) {
-        items!!.removeAt(position)
-        notifyDataSetChanged()
-    }*/
+    fun getId(position: Int) : String {
+        return items!![position].id
+    }
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
