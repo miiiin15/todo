@@ -17,13 +17,14 @@ class DBHelper(
                 "id integer primary key autoincrement," +
                 "title text," +
                 "contents text," +
-                "time text);";
+                "time text," +
+                "finished_time text DEFAULT 'not');";
 
         db.execSQL(sql)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        val sql : String = "DROP TABLE if exists mytable"
+        val sql : String = "DROP TABLE if exists todo"
 
         db.execSQL(sql)
         onCreate(db)
