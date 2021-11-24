@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,14 +65,13 @@ class MainActivity : AppCompatActivity() {
         }).apply {
             attachToRecyclerView(rv_list)
         }
-
     }
 
     @SuppressLint("Range")
     fun getAll() : ArrayList<todoList>{
         arraylist = ArrayList<todoList>()
         arraylist.clear()
-        var query = "SELECT * FROM todo;"
+        var query = "SELECT * FROM todo order by finished_time DESC;"
         var c = database.rawQuery(query,null)
         while(c.moveToNext()){
             val id = c.getString(c.getColumnIndex("id"))
@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity() {
         contentValues_todo.put("time",SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString())
         database.insert("todo",null,contentValues_todo)
     }
+
+    fun callt(){Toast.makeText(this,"d",Toast.LENGTH_SHORT).show()}
 
 
 }

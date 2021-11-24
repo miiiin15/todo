@@ -8,12 +8,10 @@
     android:layout_width="match_parent"
     android:layout_height="50dp">
 
-    <TextView
-        android:id="@+id/tv_id"
+    <CheckBox
+        android:id="@+id/btn_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="o"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +23,7 @@
         android:layout_marginStart="20dp"
         android:text="제목"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_id"
+        app:layout_constraintStart_toEndOf="@+id/btn_finish"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

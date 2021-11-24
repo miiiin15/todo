@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -9,10 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.DBHelper
 import com.example.todo.Data.todoList
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Activity) :
@@ -21,6 +26,7 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
     var items: ArrayList<todoList>? = items
     var context : Context
     var act = activity
+
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
         val inflater: LayoutInflater =
@@ -58,37 +64,43 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
     }
 
 
+
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tv_id = itemView.findViewById<TextView>(R.id.tv_id)
+        var btn_finish = itemView.findViewById<Button>(R.id.btn_finish)
         var tv_title = itemView.findViewById<TextView>(R.id.tv_title)
         var tv_time = itemView.findViewById<TextView>(R.id.tv_time)
 
 
         fun bind(todoList: todoList, context: Context, activity: Activity){
-            /*tv_id.text = todoList.id*/
+            if(todoList.finished_time != "not"){ itemView.setBackgroundColor(Color.parseColor("#cabeb3")) }
             tv_title.text = todoList.title
             tv_time.text = todoList.time
-            if(todoList.finished_time != "not"){
-                itemView.setBackgroundColor(Color.parseColor("#cabeb3"))
-                tv_id.text = "v"
-            } else{
-                itemView.setOnClickListener {
-                    val intent = Intent(context, Contents::class.java)
-                    intent.putExtra("id", todoList.id)
-                    intent.putExtra("title", todoList.title)
-                    intent.putExtra("contents", todoList.contents)
-                    intent.putExtra("time", todoList.time)
-                    context.startActivity(intent)
-                    activity.finish()
-                }
+
+            btn_finish.setOnClickListener {
+                var dbHelper = DBHelper(context, "Todo.db", null, 1)
+                var database = dbHelper.writableDatabase
+                var sql = " "
+
+                if(todoList.finished_time=="not"){sql = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString()}
+                else{sql = "not"}
+                database.execSQL("update todo set finished_time = '${sql}' where id = '${todoList.id}'; ")
+
+                (activity as MainActivity).setReceycleerView((activity as MainActivity).getAll())
+            }
+
+            itemView.setOnClickListener {
+                val intent = Intent(context, Contents::class.java)
+                intent.putExtra("id", todoList.id)
+                intent.putExtra("title", todoList.title)
+                intent.putExtra("contents", todoList.contents)
+                intent.putExtra("time", todoList.time)
+                context.startActivity(intent)
+                activity.finish()
             }
 
         }
-
-
-
     }
-
 
     init {
         this.items
