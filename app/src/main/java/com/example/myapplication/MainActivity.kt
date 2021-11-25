@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             attachToRecyclerView(rv_list)
         }
     }
+    //test
 
     @SuppressLint("Range")
     fun getAll() : ArrayList<todoList>{
