@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.DBHelper
 import com.example.todo.Data.todoList
 
+
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -109,5 +110,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val dlg = CustomDialog(this,this)
+        dlg.dialogTwoButton()
+    }
 
 }
