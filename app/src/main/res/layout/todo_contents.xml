@@ -19,40 +19,45 @@
     <TextView
         android:id="@+id/tv_contents_contents"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="350dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/square_white"
         android:text="contents"
-        android:textAlignment="center"
-        android:textSize="20dp"
+        android:textAlignment="textStart"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_contents_title" />
 
-    <Button
-        android:id="@+id/btn_contents_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="50dp"
-        android:text="수정"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_contents_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        android:text="삭제"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
+    <ImageButton
         android:id="@+id/btn_contents_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="나가기"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_contents_title" />
+
+    <ImageButton
+        android:id="@+id/btn_contents_edit"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintEnd_toStartOf="@+id/btn_contents_delete"
+        app:layout_constraintTop_toTopOf="@+id/btn_contents_delete" />
+
+    <ImageButton
+        android:id="@+id/btn_contents_delete"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,7 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todo.DBHelper
@@ -11,8 +11,8 @@ class Edit : AppCompatActivity(){
     val edt_title : EditText by lazy { findViewById(R.id.edt_edit_title) }
     val edt_contents : EditText by lazy { findViewById(R.id.edt_edit_contents) }
 
-    val btn_back : Button by lazy { findViewById(R.id.btn_edit_back) }
-    val btn_edit : Button by lazy { findViewById(R.id.btn_edit_finish) }
+    val btn_back : ImageButton by lazy { findViewById(R.id.btn_edit_back) }
+    val btn_edit : ImageButton by lazy { findViewById(R.id.btn_edit_finish) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

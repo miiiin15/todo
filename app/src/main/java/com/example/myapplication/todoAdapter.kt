@@ -1,16 +1,13 @@
 package com.example.myapplication
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.DBHelper
@@ -67,7 +64,7 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var btn_finish = itemView.findViewById<Button>(R.id.btn_finish)
+        var btn_finish = itemView.findViewById<CheckBox>(R.id.btn_finish)
         var tv_title = itemView.findViewById<TextView>(R.id.tv_title)
         var tv_time = itemView.findViewById<TextView>(R.id.tv_time)
 

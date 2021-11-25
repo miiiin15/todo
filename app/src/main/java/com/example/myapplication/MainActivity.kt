@@ -2,13 +2,14 @@ package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.view.inputmethod.InputMethodManager
+import android.widget.ImageButton
 import android.widget.EditText
-import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     val database : SQLiteDatabase by lazy { dbHelper.writableDatabase }
 
     val edt_input : EditText by lazy{ findViewById(R.id.edt_input) }
-    val btn_in : Button by lazy{ findViewById(R.id.btn_in) }
+    val btn_in : ImageButton by lazy{ findViewById(R.id.btn_in) }
     val rv_list : RecyclerView by lazy{ findViewById(R.id.rv_list) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             Insert()
             edt_input.setText("")
             setReceycleerView(getAll())
+            closeKeyboard()
         }
     }
 
@@ -97,7 +99,14 @@ class MainActivity : AppCompatActivity() {
         database.insert("todo",null,contentValues_todo)
     }
 
-    fun callt(){Toast.makeText(this,"d",Toast.LENGTH_SHORT).show()}
+    fun closeKeyboard() {
+        var view = this.currentFocus
+
+        if (view != null) {
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 
 
 }

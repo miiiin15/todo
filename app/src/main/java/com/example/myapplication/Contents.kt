@@ -5,7 +5,7 @@ import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todo.DBHelper
@@ -13,9 +13,9 @@ import com.example.todo.DBHelper
 class Contents : AppCompatActivity() {
     val tv_title : TextView by lazy{ findViewById(R.id.tv_contents_title) }
     val tv_contents : TextView by lazy{ findViewById(R.id.tv_contents_contents) }
-    val btn_back : Button by lazy { findViewById(R.id.btn_contents_back) }
-    val btn_edit : Button by lazy { findViewById(R.id.btn_contents_edit) }
-    val btn_del : Button by lazy { findViewById(R.id.btn_contents_delete) }
+    val btn_back : ImageButton by lazy { findViewById(R.id.btn_contents_back) }
+    val btn_edit : ImageButton by lazy { findViewById(R.id.btn_contents_edit) }
+    val btn_del : ImageButton by lazy { findViewById(R.id.btn_contents_delete) }
 
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase

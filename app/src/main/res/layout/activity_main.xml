@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
         android:layout_margin="10dp">
 
@@ -23,11 +24,13 @@
             android:inputType="textPersonName"
             android:hint="제목/내용 형식으로 작성해주세요."/>
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_in"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="입력"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/bgrey" />
 
 
     </LinearLayout>
