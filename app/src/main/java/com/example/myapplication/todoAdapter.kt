@@ -21,32 +21,18 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
     RecyclerView.Adapter<todoAdapter.ViewHolder?>(){
 
     var items: ArrayList<todoList>? = items
-    var context : Context
+    var context : Context = context
     var act = activity
 
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val inflater: LayoutInflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val itemView: View = inflater.inflate(
-            R.layout.todo_item,
-            viewGroup,
-            false
-        )
+
+        val inflater: LayoutInflater =  context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val itemView: View = inflater.inflate(R.layout.todo_item, viewGroup, false)
+
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        /*viewHolder.tv_id.text = items!!.get(position).id
-        viewHolder.tv_title.text = items!!.get(position).title
-        viewHolder.tv_time.text = items!!.get(position).time
-
-        viewHolder.itemView.setOnClickListener{
-            Log.e("클릭함 ",position.toString())
-            val intent = Intent(context,Contents::class.java)
-            *//*intent.putExtra("id",items!!.get(position).id)*//*
-            context.startActivity(intent)
-        }*/
         viewHolder.bind(items!!.get(position),context,act)
     }
 
@@ -60,9 +46,6 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
         return items!![position].id
     }
 
-
-
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var btn_finish = itemView.findViewById<CheckBox>(R.id.btn_finish)
         var tv_title = itemView.findViewById<TextView>(R.id.tv_title)
@@ -70,39 +53,35 @@ class todoAdapter(items : ArrayList<todoList>?, context : Context, activity: Act
 
 
         fun bind(todoList: todoList, context: Context, activity: Activity){
-            if(todoList.finished_time != "not"){ itemView.setBackgroundColor(Color.parseColor("#cabeb3")) }
             tv_title.text = todoList.title
             tv_time.text = todoList.time
 
+            if(todoList.finished_time != "not") itemView.setBackgroundColor(Color.parseColor("#cabeb3"))
+
             btn_finish.setOnClickListener {
+
                 var dbHelper = DBHelper(context, "Todo.db", null, 1)
                 var database = dbHelper.writableDatabase
-                var sql = " "
 
-                if(todoList.finished_time=="not"){sql = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString()}
-                else{sql = "not"}
+                var sql = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString()
+                if(todoList.finished_time!="not"){sql = "not"}
+
                 database.execSQL("update todo set finished_time = '${sql}' where id = '${todoList.id}'; ")
 
-                (activity as MainActivity).setReceycleerView((activity as MainActivity).getAll())
+                (activity as MainActivity).setReceycleerView((activity).getAll())
             }
 
             itemView.setOnClickListener {
-                val intent = Intent(context, Contents::class.java)
-                intent.putExtra("id", todoList.id)
-                intent.putExtra("title", todoList.title)
-                intent.putExtra("contents", todoList.contents)
-                intent.putExtra("time", todoList.time)
+                val intent = Intent(context, Contents::class.java).apply {
+                    putExtra("id", todoList.id)
+                    putExtra("title", todoList.title)
+                    putExtra("contents", todoList.contents)
+                    putExtra("time", todoList.time)
+                }
                 context.startActivity(intent)
                 activity.finish()
             }
 
         }
     }
-
-    init {
-        this.items
-        this.context = context
-
-    }
-
 }

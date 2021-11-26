@@ -31,7 +31,6 @@ class Contents : AppCompatActivity() {
         dbHelper = DBHelper(this, "Todo.db", null, 1)
         database = dbHelper.writableDatabase
 
-
         tv_title.text = intent.getStringExtra("title")
         tv_contents.text = intent.getStringExtra("contents")
 
@@ -41,27 +40,23 @@ class Contents : AppCompatActivity() {
         }
 
         btn_edit.setOnClickListener {
-            var intent = Intent(this,Edit::class.java)
-            intent.putExtra("id",id)
-            intent.putExtra("title",tv_title.text)
-            intent.putExtra("contents",tv_contents.text)
+            var intent = Intent(this,Edit::class.java).apply {
+                putExtra("id",id)
+                putExtra("title",tv_title.text)
+                putExtra("contents",tv_contents.text)
+            }
             startActivity(intent)
+            finish()
         }
 
         btn_del.setOnClickListener {
             database.execSQL("delete from todo where id = ${id}")
             startActivity(Intent(this,MainActivity::class.java))
         }
-
-
     }
 
     override fun onBackPressed() {
         startActivity(Intent(this,MainActivity::class.java))
         finish()
     }
-
-
-
-
 }

@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.EditText
@@ -42,12 +41,15 @@ class MainActivity : AppCompatActivity() {
 
         btn_in.setOnClickListener{
             if(edt_input.text.isEmpty()||edt_input.text.indexOf("/")==-1) return@setOnClickListener
-            Insert()
+
             edt_input.setText("")
+
+            Insert()
             setReceycleerView(getAll())
             closeKeyboard()
         }
     }
+
 
     fun setReceycleerView(arrayList: ArrayList<todoList>){
         val todoAdapter = todoAdapter(arraylist,this,this)
@@ -61,15 +63,12 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int){
                 var index =(rv_list.adapter as todoAdapter).getId(viewHolder.adapterPosition)
-                Log.e("삭제 ID " , index.toString())
                 database.execSQL("delete from todo where id = ${index}")
                 setReceycleerView(getAll())
+                //Log.e("삭제 ID " , index.toString())
             }
-        }).apply {
-            attachToRecyclerView(rv_list)
-        }
+        }).apply { attachToRecyclerView(rv_list) }
     }
-    //test
 
     @SuppressLint("Range")
     fun getAll() : ArrayList<todoList>{
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             val finished_time = c.getString(c.getColumnIndex("finished_time"))
             val todolist = todoList(id,title,contents,time,finished_time)
             arraylist.add(todolist)
-//            Log.e("결 과",id+"-"+title+"."+contents +"/"+time+"/"+finished_time)
+            //Log.e("결 과",id+"-"+title+"."+contents +"/"+time+"/"+finished_time)
         }
         return arraylist
     }
@@ -94,16 +93,15 @@ class MainActivity : AppCompatActivity() {
         val str = edt_input.text.toString().split("/")
         val title = str[0]
         val contents = str[1]
-        var contentValues_todo = ContentValues()
-        contentValues_todo.put("title",title)
-        contentValues_todo.put("contents",contents)
-        contentValues_todo.put("time",SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString())
-        database.insert("todo",null,contentValues_todo)
+        var contentValues = ContentValues()
+        contentValues.put("title",title)
+        contentValues.put("contents",contents)
+        contentValues.put("time",SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString())
+        database.insert("todo",null,contentValues)
     }
 
     fun closeKeyboard() {
         var view = this.currentFocus
-
         if (view != null) {
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)

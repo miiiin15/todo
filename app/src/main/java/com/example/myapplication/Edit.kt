@@ -2,36 +2,55 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.databinding.TodoEditBinding
+
 import com.example.todo.DBHelper
 
 class Edit : AppCompatActivity(){
-    val edt_title : EditText by lazy { findViewById(R.id.edt_edit_title) }
-    val edt_contents : EditText by lazy { findViewById(R.id.edt_edit_contents) }
+    private lateinit var binding: TodoEditBinding
 
-    val btn_back : ImageButton by lazy { findViewById(R.id.btn_edit_back) }
-    val btn_edit : ImageButton by lazy { findViewById(R.id.btn_edit_finish) }
+    private lateinit var id : String
+    private lateinit var title : String
+    lateinit var contents : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.todo_edit)
-        edt_title.setText(intent.getStringExtra("title"))
-        edt_contents.setText(intent.getStringExtra("contents"))
+        binding = TodoEditBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btn_back.setOnClickListener { finish() }
-        btn_edit.setOnClickListener {
+        var id = intent.getStringExtra("id")
+        var title = intent.getStringExtra("title")
+        var contents = intent.getStringExtra("contents")
 
-            if(edt_contents.text.isEmpty()||edt_title.text.isEmpty())return@setOnClickListener
+        binding.edtEditTitle.setText(title)
+        binding.edtEditContents.setText(contents)
+
+        binding.btnEditBack.setOnClickListener { goBack() }
+
+        binding.btnEditFinish.setOnClickListener {
+            if(binding.edtEditContents.text.isEmpty()||binding.edtEditTitle.text.isEmpty())
+                return@setOnClickListener
 
             var dbHelper = DBHelper(this, "Todo.db", null, 1)
             var database = dbHelper.writableDatabase
             database.execSQL("update todo set " +
-                    "title = '${edt_title.text}', contents = '${edt_contents.text}'" +
-                    "where id = '${intent.getStringExtra("id")}'; ")
+                    "title = '${binding.edtEditTitle.text}', " +
+                    "contents = '${binding.edtEditContents.text}'" +
+                    "where id = '${id}'; ")
             startActivity(Intent(this,MainActivity::class.java))
             finish()
         }
     }
+    fun goBack(){
+        val intent = Intent(this, Contents::class.java).apply {
+            putExtra("id", intent.getStringExtra("id"))
+            putExtra("title", intent.getStringExtra("title"))
+            putExtra("contents", intent.getStringExtra("contents"))
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onBackPressed() { goBack() }
 }
