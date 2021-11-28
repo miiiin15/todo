@@ -9,9 +9,7 @@ import com.example.todo.DBHelper
 
 class Edit : AppCompatActivity(){
     private lateinit var binding: TodoEditBinding
-
-    private lateinit var id : String
-    private lateinit var title : String
+    
     lateinit var contents : String
 
     override fun onCreate(savedInstanceState: Bundle?) {

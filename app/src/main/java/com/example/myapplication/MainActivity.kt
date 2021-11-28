@@ -12,6 +12,7 @@ import android.widget.EditText
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.todo.DBHelper
 import com.example.todo.Data.todoList
 
@@ -21,53 +22,52 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
 
     lateinit var arraylist : ArrayList<todoList>
 
     val dbHelper : DBHelper by lazy { DBHelper(this, "Todo.db", null, 1) }
     val database : SQLiteDatabase by lazy { dbHelper.writableDatabase }
 
-    val edt_input : EditText by lazy{ findViewById(R.id.edt_input) }
-    val btn_in : ImageButton by lazy{ findViewById(R.id.btn_in) }
-    val rv_list : RecyclerView by lazy{ findViewById(R.id.rv_list) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         dbHelper.onCreate(database)
 
         setReceycleerView(getAll())
 
-        btn_in.setOnClickListener{
-            if(edt_input.text.isEmpty()||edt_input.text.indexOf("/")==-1) return@setOnClickListener
-
-            edt_input.setText("")
-
+        binding.btnIn.setOnClickListener{
+            if(binding.edtInput.text.isEmpty()||binding.edtInput.text.indexOf("/")==-1) return@setOnClickListener
             Insert()
             setReceycleerView(getAll())
+            binding.edtInput.setText("")
             closeKeyboard()
         }
     }
 
 
     fun setReceycleerView(arrayList: ArrayList<todoList>){
+
         val todoAdapter = todoAdapter(arraylist,this,this)
-        rv_list.adapter = todoAdapter
-        rv_list.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-        rv_list.setHasFixedSize(true)
+        binding.rvList.apply {
+            adapter = todoAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity,LinearLayoutManager.VERTICAL,false)
+            setHasFixedSize(true)
+        }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return true
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int){
-                var index =(rv_list.adapter as todoAdapter).getId(viewHolder.adapterPosition)
+                var index =(binding.rvList.adapter as todoAdapter).getId(viewHolder.adapterPosition)
                 database.execSQL("delete from todo where id = ${index}")
                 setReceycleerView(getAll())
                 //Log.e("삭제 ID " , index.toString())
             }
-        }).apply { attachToRecyclerView(rv_list) }
+        }).apply { attachToRecyclerView(binding.rvList) }
     }
 
     @SuppressLint("Range")
@@ -90,13 +90,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun Insert(){
-        val str = edt_input.text.toString().split("/")
+        val str = binding.edtInput.text.split("/")
         val title = str[0]
         val contents = str[1]
-        var contentValues = ContentValues()
-        contentValues.put("title",title)
-        contentValues.put("contents",contents)
-        contentValues.put("time",SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString())
+        var contentValues = ContentValues().apply {
+            put("title",title)
+            put("contents",contents)
+            put("time",SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Date()).toString())
+        }
         database.insert("todo",null,contentValues)
     }
 
@@ -109,8 +110,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val dlg = CustomDialog(this,this)
-        dlg.dialogTwoButton()
+        val dlg = CustomDialog(this,this).dialogTwoButton()
     }
 
 }
